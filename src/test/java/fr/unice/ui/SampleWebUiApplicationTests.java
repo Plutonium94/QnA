@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package fr.unice.ui;
+package fr.unice.qna.ui;
+
+import fr.unice.qna.*;
+import fr.unice.qna.persistence.*;
 
 import java.net.URI;
 

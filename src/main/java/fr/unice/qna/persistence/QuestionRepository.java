@@ -1,4 +1,4 @@
-package fr.unice.ui;
+package fr.unice.qna.persistence;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.JpaRepository;

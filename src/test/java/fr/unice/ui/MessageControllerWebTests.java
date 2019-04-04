@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package fr.unice.ui;
+package fr.unice.qna.ui;
+
+import fr.unice.qna.SampleWebUiApplication;
 
 import java.util.regex.Pattern;
 

@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package fr.unice.ui;
+package fr.unice.qna.ui;
 
 import java.util.Calendar;
 

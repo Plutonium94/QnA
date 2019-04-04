@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.unice.ui;
+package fr.unice.qna.ui;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

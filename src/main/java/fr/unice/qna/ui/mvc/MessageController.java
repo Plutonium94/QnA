@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package fr.unice.ui.mvc;
+package fr.unice.qna.ui.mvc;
 
 import javax.validation.Valid;
 
@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import fr.unice.ui.Message;
-import fr.unice.ui.MessageRepository;
+import fr.unice.qna.ui.Message;
+import fr.unice.qna.ui.MessageRepository;
 
 /**
  * @author Rob Winch

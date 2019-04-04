@@ -1,6 +1,6 @@
-package fr.unice.ui.mvc;
+package fr.unice.qna.ui.mvc;
 
-import fr.unice.ui.*;
+import fr.unice.qna.persistence.*;
 
 
 import org.springframework.stereotype.Controller;

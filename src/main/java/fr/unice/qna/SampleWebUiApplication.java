@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package fr.unice.ui;
+package fr.unice.qna;
+
+import fr.unice.qna.persistence.*;
+import fr.unice.qna.ui.*;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.CommandLineRunner;

@@ -1,4 +1,4 @@
-package fr.unice.ui;
+package fr.unice.qna.persistence;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,7 +16,7 @@ public class Question implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public Question() {
-		
+		this.timestamp = System.nanoTime();
 	}
 
 	public Question(String title, String detail, long timestamp) {
