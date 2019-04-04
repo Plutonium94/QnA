@@ -1,11 +1,19 @@
 package fr.unice.ui;
 
-public class Question {
+import javax.persistence.*;
+import java.io.Serializable;
 
+@Entity
+public class Question implements Serializable {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String title;
 	private String detail;
 	private long timestamp;
+
+	private static final long serialVersionUID = 1L;
 
 	public Question() {
 		

@@ -5,6 +5,7 @@ import fr.unice.ui.*;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @Controller
 public class QuestionController {
 
+	@Autowired
+	private QuestionRepository questRep;
+
 	@RequestMapping(value = "/new", method={RequestMethod.GET})
 	public String showNewForm(Model model) {
 		model.addAttribute("question", new Question());
@@ -23,7 +27,8 @@ public class QuestionController {
 
 	@PostMapping("/new")
 	public String newFormSubmit(@ModelAttribute Question question, BindingResult br, Model model) {
-		model.addAttribute("question",question);
+		Question qRes = questRep.save(question);
+		model.addAttribute("question",qRes);
 		return "questions/nice";
 	}
 
