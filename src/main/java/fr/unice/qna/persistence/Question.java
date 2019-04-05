@@ -4,13 +4,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class Question implements Serializable {
+public class Question extends Post implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String title;
-	private String detail;
 	private long timestamp;
 
 	private static final long serialVersionUID = 1L;
@@ -20,9 +19,8 @@ public class Question implements Serializable {
 	}
 
 	public Question(String title, String detail, long timestamp) {
-		this.id = 0;
+		super(detail);
 		this.title = title;
-		this.detail = detail;
 		this.timestamp = timestamp;
 	}
 
@@ -47,11 +45,11 @@ public class Question implements Serializable {
 	}
 
 	public String getDetail() {
-		return detail;
+		return super.getContent();
 	}
 
 	public void setDetail(String detail) {
-		this.detail = detail; 
+		super.setContent(detail); 
 	}
 
 	public void setTimestamp(long timestamp) {
@@ -63,18 +61,18 @@ public class Question implements Serializable {
 	}
 
 	public String toString() {
-		return String.format("Question[id=%d, title=%s, detail=%s, timestamp=%s]", id, title, detail, timestamp);
+		return String.format("Question[id=%d, title=%s, detail=%s, timestamp=%s]", id, title, getDetail(), timestamp);
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if(o == null || !(o instanceof Question)) { return false; }
 		Question q = (Question)o;
-		return id == q.id && title.equals(q.title) && detail.equals(detail) && timestamp==q.timestamp;
+		return id == q.id && title.equals(q.title) && timestamp==q.timestamp && super.equals(o);
 	}
 
 	@Override
 	public int hashCode() {
-		return (int)id + title.hashCode() + detail.hashCode() + (int)timestamp;
+		return (int)id + title.hashCode() + (int)timestamp + super.hashCode();
 	}
-};
+}

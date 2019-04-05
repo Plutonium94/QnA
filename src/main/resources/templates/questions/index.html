@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<title>QnA : Questions</title>
+</head>
+<body>
+
+	<h1>Questions</h1>
+
+	<div th:each="q : ${questions}">
+		<h3><a th:href="@{/questions/{qid}(qid=${q.id})}" th:text="${q.title}"></h3>
+	</div>
+
+
+</body>
+</html>

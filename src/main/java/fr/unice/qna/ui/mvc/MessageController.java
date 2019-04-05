@@ -32,7 +32,7 @@ import fr.unice.qna.ui.MessageRepository;
  * @author Rob Winch
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/messages")
 public class MessageController {
 	private final MessageRepository messageRepository;
 

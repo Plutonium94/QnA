@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<title th:text="${'QnA - ' + shortedTitle}"></title>
+</head>
+<body>
+
+	<h1 th:text="${question.title}"></h1>
+
+	<p th:text="${question.detail}"></p>
+	
+	<p><span th:text="${question.upVotes}"></span> upvotes and <span th:text="${question.downVotes}"></span> downvotes.</p>
+
+
+</body>
+</html>
