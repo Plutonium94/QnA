@@ -10,7 +10,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -59,6 +61,17 @@ public class QuestionController {
 			String title = question.getTitle();
 			model.addAttribute("shortedTitle", (title.length() <= 8)?title: (title.substring(0,8) + "..."));
 			return "questions/view";
+		}
+	}
+
+	@PutMapping("/upvote/{id}")
+	public @ResponseBody boolean upVote(@PathVariable("id") long id) {
+		Optional<Question> questionOpt = questRep.findById(id);
+		if(questionOpt.isPresent()) {
+			questionOpt.get().upVote();
+			return true;
+		} else {
+			return false;
 		}
 	}
 

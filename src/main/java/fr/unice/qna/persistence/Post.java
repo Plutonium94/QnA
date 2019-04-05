@@ -62,4 +62,16 @@ public class Post {
 	public String toString() {
 		return String.format("Post[content: %s, upVotes: %d, downVotes: %d]", content, upVotes, downVotes);
 	}
+
+	public int getRating() {
+		return upVotes - downVotes;
+	}
+
+	public void upVote() {
+		++upVotes;
+	}
+
+	public void downVote() {
+		++downVotes;
+	}
 }

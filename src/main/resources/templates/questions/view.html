@@ -11,8 +11,35 @@
 
 	<p th:text="${question.detail}"></p>
 	
-	<p><span th:text="${question.upVotes}"></span> upvotes and <span th:text="${question.downVotes}"></span> downvotes.</p>
+	<p>
+		<span id="upvotes" th:text="${question.upVotes}"></span>
+		&nbsp;upvotes and 
+		<span th:text="${question.downVotes}"></span>
+		&nbsp;downvotes.
+	</p>
 
 
+	<button id="upvote" type="button">upvote !</button>
+	<button id="downvote" type="button">downvote !</button>
+
+	<script th:inline="javascript">
+
+
+
+
+		document.addEventListener('DOMContentLoaded', (e)=>{
+			document.getElementById('upvote').addEventListener('click', (evt)=>{
+				let url = [[@{/questions/upvote/{qid}(qid=${question.id})}]];
+				fetch(url, {method: 'PUT'}).then((data)=>{
+					if(data) {
+						let upvotesSpan = document.getElementById('upvotes');
+						let upvotes = Number(upvotesSpan.textContent);
+						upvotesSpan.textContent = (upvotes + 1);
+					}
+				});
+			});
+		});
+
+	</script>
 </body>
 </html>
