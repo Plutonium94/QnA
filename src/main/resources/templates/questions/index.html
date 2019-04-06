@@ -7,6 +7,9 @@
 </head>
 <body>
 
+	<div th:replace="questions/header :: header"></div>
+
+
 	<h1>Questions</h1>
 
 	<div th:each="q : ${questions}">

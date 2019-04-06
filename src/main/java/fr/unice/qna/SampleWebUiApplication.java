@@ -50,6 +50,16 @@ public class SampleWebUiApplication {
 		};
 	}
 
+	@Bean
+	public CommandLineRunner insertSampleData(QuestionRepository rep) {
+		return (String[] args) -> {
+			rep.save(new Question("Number of continents","How many continents are there in the world ?"));
+			rep.save(new Question("Photosynthesis", "What is Photosynthesis ?"));
+			rep.save(new Question("Object Oriented Languages", "What are some Object Oriented Languages ?"));
+			rep.save(new Question("Alternatives to Angular","Are there any front-end mvc frameworks other than Angular"));
+		};
+	}
+
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(SampleWebUiApplication.class, args);
 	}
