@@ -12,15 +12,15 @@
 	<p th:text="${question.detail}"></p>
 	
 	<p>
-		<span id="upvotes" th:text="${question.upVotes}"></span>
+		<span id="q_upvotes" th:text="${question.upVotes}"></span>
 		&nbsp;upvotes and 
-		<span th:text="${question.downVotes}"></span>
+		<span id="q_downvotes" th:text="${question.downVotes}"></span>
 		&nbsp;downvotes.
 	</p>
 
 
-	<button id="upvote" type="button">upvote !</button>
-	<button id="downvote" type="button">downvote !</button>
+	<button id="q_upvote" type="button">upvote !</button>
+	<button id="q_downvote" type="button">downvote !</button>
 
 	<script th:inline="javascript">
 
@@ -28,13 +28,29 @@
 
 
 		document.addEventListener('DOMContentLoaded', (e)=>{
-			document.getElementById('upvote').addEventListener('click', (evt)=>{
+			document.getElementById('q_upvote').addEventListener('click', (evt)=>{
 				let url = [[@{/questions/upvote/{qid}(qid=${question.id})}]];
-				fetch(url, {method: 'PUT'}).then((data)=>{
-					if(data) {
-						let upvotesSpan = document.getElementById('upvotes');
+				fetch(url, {method: 'PUT'}).then((res)=>{
+					return res.text();
+				}).then((data)=>{
+					console.log(data);
+					if(data == "true") {
+						let upvotesSpan = document.getElementById('q_upvotes');
 						let upvotes = Number(upvotesSpan.textContent);
 						upvotesSpan.textContent = (upvotes + 1);
+					}
+				});
+			});
+
+			document.getElementById('q_downvote').addEventListener('click', (evt)=>{
+				let url = [[@{/questions/downvote/{qid}(qid=${question.id})}]];
+				fetch(url, {method: 'PUT'}).then((res)=>{
+					return res.text();
+				}).then((data)=>{
+					if(data == "true") {
+						let downvotesSpan = document.getElementById('q_downvotes');
+						let downvotes = Number(downvotesSpan.textContent);
+						downvotesSpan.textContent = (downvotes + 1);
 					}
 				});
 			});

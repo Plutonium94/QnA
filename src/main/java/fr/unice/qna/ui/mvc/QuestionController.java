@@ -66,13 +66,12 @@ public class QuestionController {
 
 	@PutMapping("/upvote/{id}")
 	public @ResponseBody boolean upVote(@PathVariable("id") long id) {
-		Optional<Question> questionOpt = questRep.findById(id);
-		if(questionOpt.isPresent()) {
-			questionOpt.get().upVote();
-			return true;
-		} else {
-			return false;
-		}
+		return questRep.upVote(id);
+	}
+
+	@PutMapping("/downvote/{id}")
+	public @ResponseBody boolean downVote(@PathVariable("id") long id) {
+		return questRep.downVote(id);
 	}
 
 
