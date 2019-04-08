@@ -51,12 +51,17 @@ public class SampleWebUiApplication {
 	}
 
 	@Bean
-	public CommandLineRunner insertSampleData(QuestionRepository rep) {
+	public CommandLineRunner insertSampleData(QuestionRepository qrep, TagRepository trep) {
 		return (String[] args) -> {
-			rep.save(new Question("Number of continents","How many continents are there in the world ?"));
-			rep.save(new Question("Photosynthesis", "What is Photosynthesis ?"));
-			rep.save(new Question("Object Oriented Languages", "What are some Object Oriented Languages ?"));
-			rep.save(new Question("Alternatives to Angular","Are there any front-end mvc frameworks other than Angular"));
+
+			trep.save(new Tag("Physics"));
+			trep.save(new Tag("Sports"));
+			trep.save(new Tag("Volleyball"));
+
+			qrep.save(new Question("Number of continents","How many continents are there in the world ?", "Geography"));
+			qrep.save(new Question("Photosynthesis", "What is Photosynthesis ?", "Biology"));
+			qrep.save(new Question("Object Oriented Languages", "What are some Object Oriented Languages ?", "Software"));
+			qrep.save(new Question("Alternatives to Angular","Are there any front-end mvc frameworks other than Angular", "OO"));
 		};
 	}
 

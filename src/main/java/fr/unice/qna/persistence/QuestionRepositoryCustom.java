@@ -9,4 +9,8 @@ public interface QuestionRepositoryCustom {
 
 	boolean downVote(long questionId);
 
+	// @Deprecated
+	boolean addTag(long questionId, String tagName);
+
+
 }

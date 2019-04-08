@@ -9,12 +9,17 @@
 
 	<h1>Ask a new question</h1>
 
-	<form method="POST" action="/questions/new" th:object="${question}">
+	<form method="POST" action="/questions/new" name="req" th:object="${question}">
 		<input type="text" th:field="*{title}" placeholder="Title" />
 		<textarea th:field="*{detail}" placeholder="The question details go here ...">
 		</textarea>
+
+		
+		
+
 		<button type="submit">Ask !</button>
 	</form>
 
+	
 </body>
 </html>

@@ -1,7 +1,11 @@
 package fr.unice.qna.persistence;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.Arrays;
 
 @Entity
 public class Question extends Post implements Serializable {
@@ -11,6 +15,11 @@ public class Question extends Post implements Serializable {
 	private long id;
 	private String title;
 	private long timestamp;
+
+	@ManyToMany(cascade={CascadeType.PERSIST})
+	// @ElementCollection
+	// @ManyToMany
+	private Set<Tag> tags = new TreeSet<Tag>();
 
 	private static final long serialVersionUID = 1L;
 
@@ -24,8 +33,16 @@ public class Question extends Post implements Serializable {
 		this.timestamp = timestamp;
 	}
 
+
 	public Question(String title, String detail) {
 		this(title, detail, System.nanoTime());
+	}
+
+	public Question(String title, String detail, String... tagNames) {
+		this(title, detail);
+		for(String tn : tagNames) {
+			this.tags.add(new Tag(tn));
+		}
 	}
 
 	public long getId() {
@@ -60,19 +77,28 @@ public class Question extends Post implements Serializable {
 		return timestamp;
 	}
 
+	public Set<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
+	}
+
 	public String toString() {
-		return String.format("Question[id=%d, title=%s, detail=%s, timestamp=%s]", id, title, getDetail(), timestamp);
+		return String.format("Question[id=%d, title=%s, detail=%s, timestamp=%d, tags=%s]", id, title, getDetail(), timestamp, tags.toString());
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if(o == null || !(o instanceof Question)) { return false; }
 		Question q = (Question)o;
-		return id == q.id && title.equals(q.title) && timestamp==q.timestamp && super.equals(o);
+		return id == q.id && title.equals(q.title) && timestamp==q.timestamp 
+			&& tags.equals(q.tags) && super.equals(o);
 	}
 
 	@Override
 	public int hashCode() {
-		return (int)id + title.hashCode() + (int)timestamp + super.hashCode();
+		return (int)id + title.hashCode() + (int)timestamp + tags.hashCode() + super.hashCode();
 	}
 }

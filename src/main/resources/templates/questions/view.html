@@ -20,6 +20,17 @@
 		&nbsp;downvotes.
 	</p>
 
+	<p id="q_tags">
+		<span class="tag" th:text="${t.name}" th:each="t : ${question.tags}"></span>
+	</p>
+
+	<input type="text" list="allTags" id="addTagInput" placeholder="Add Tag">
+	<button type="button" id="addTagButton">Add Tag</button>
+
+	<datalist id="allTags">
+		<option th:each="t : ${allTags}" th:value="${t.name}">
+	</datalist>
+
 
 	<button id="q_upvote" type="button">upvote !</button>
 	<button id="q_downvote" type="button">downvote !</button>
@@ -56,8 +67,32 @@
 					}
 				});
 			});
+
+
+			document.getElementById('addTagButton').addEventListener('click', (evt)=>{
+				let addTagInput = document.getElementById('addTagInput');
+				let tag = addTagInput.value;
+				let url = [[@{/questions/{qid}/addTag(qid=${question.id})}]];
+				let q_tags = document.getElementById('q_tags');
+				let datalist = document.getElementById('allTags');
+				if(tag) {
+					fetch(url, {method:'PUT',body:tag}).then((res)=>{
+						return res.text();
+					}).then((data)=>{
+						if(data == 'true') {
+							q_tags.innerHTML += '<span class="tag">'+tag+'</span>&nbsp;';
+							allTags.innerHTML += '<option value="'+tag+'">';
+							addTagInput.value = '';
+						}
+					});
+				}
+			});
 		});
 
 	</script>
+
+	<style>
+		.tag {margin-right: 7px;}
+	</style>
 </body>
 </html>

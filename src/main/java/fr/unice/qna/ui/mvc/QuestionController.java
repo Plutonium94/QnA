@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Optional;
 
 @RequestMapping("/questions")
@@ -25,6 +28,9 @@ public class QuestionController {
 
 	@Autowired
 	private QuestionRepository questRep;
+
+	@Autowired
+	private TagRepository tagRep;
 
 	@RequestMapping(value = "/new", method={RequestMethod.GET})
 	public String showNewForm(Model model) {
@@ -60,6 +66,7 @@ public class QuestionController {
 			model.addAttribute("question",question);
 			String title = question.getTitle();
 			model.addAttribute("shortedTitle", (title.length() <= 8)?title: (title.substring(0,8) + "..."));
+			model.addAttribute("allTags",tagRep.findAll());
 			return "questions/view";
 		}
 	}
@@ -72,6 +79,11 @@ public class QuestionController {
 	@PutMapping("/downvote/{id}")
 	public @ResponseBody boolean downVote(@PathVariable("id") long id) {
 		return questRep.downVote(id);
+	}
+
+	@PutMapping("/{id}/addTag")
+	public @ResponseBody boolean addTag(@PathVariable("id") long id, @RequestBody String tagName) {
+		return questRep.addTag(id, tagName);
 	}
 
 
