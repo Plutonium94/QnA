@@ -36,7 +36,11 @@
 
 	<div id="answers">
 
-		<textarea id="yourAnswer" placeholder="Enter your answer here ..."></textarea>
+		<form method="POST" th:action="@{/questions/{qid}/new-answer(qid=${question.id})}" th:object="${newAnswer}">
+			<textarea id="yourAnswer" th:field="*{content}" placeholder="Enter your answer here ...">
+			</textarea>
+			<button type="submit">Post your answer</button>
+		</form>
 
 		<div class="answer" th:each="a : ${question.answers}" th:text="${a.content}"></div>		
 

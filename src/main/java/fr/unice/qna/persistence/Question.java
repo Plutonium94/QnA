@@ -18,10 +18,10 @@ public class Question extends Post implements Serializable {
 	private String title;
 	private long timestamp;
 
-	@ManyToMany(cascade={CascadeType.PERSIST})
+	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<Tag> tags = new TreeSet<Tag>();
 
-	@OneToMany(cascade = {CascadeType.PERSIST})
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<Answer> answers = new ArrayList<Answer>();
 
 	private static final long serialVersionUID = 1L;

@@ -63,10 +63,12 @@ public class QuestionController {
 			return "redirect:/questions/";
 		} else {
 			Question question = questionOpt.get();
+			System.out.println(question);
 			model.addAttribute("question",question);
 			String title = question.getTitle();
 			model.addAttribute("shortedTitle", (title.length() <= 8)?title: (title.substring(0,8) + "..."));
 			model.addAttribute("allTags",tagRep.findAll());
+			model.addAttribute("newAnswer", new Answer());
 			return "questions/view";
 		}
 	}
@@ -86,5 +88,18 @@ public class QuestionController {
 		return questRep.addTag(id, tagName);
 	}
 
+	@PostMapping("/{id}/new-answer")
+	public String postNewAnswer(@PathVariable("id") long id,  @ModelAttribute("newAnswer") Answer newAnswer, @ModelAttribute("question") Question question, Model model, BindingResult br) {
+		System.out.println(newAnswer);
+		// System.out.println(model);
+		// questRep.postNewAnswer(question, newAnswer);
+		questRep.postNewAnswer(id, newAnswer.getContent());
+		return "redirect:/questions/{id}";
+	}
+
+	/*@PostMapping("/{id}/new-answer")
+	public @ResponseBody boolean postNewAnswer(@PathVariable("id") long id, String answerContent) {
+		return questRep.postNewAnswer(id,answerContent);
+	}*/
 
 }

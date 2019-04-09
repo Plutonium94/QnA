@@ -41,7 +41,7 @@ public class Answer extends Post implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("Answer[id: %d, content: %s, upvotes: %d, downvotes: %d",
+		return String.format("Answer[id: %d, content: %s, upvotes: %d, downvotes: %d]",
 			getId(), getContent(), getUpVotes(), getDownVotes());
 	}
 }

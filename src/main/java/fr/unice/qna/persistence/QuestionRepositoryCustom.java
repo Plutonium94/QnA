@@ -9,8 +9,10 @@ public interface QuestionRepositoryCustom {
 
 	boolean downVote(long questionId);
 
-	// @Deprecated
 	boolean addTag(long questionId, String tagName);
 
+	boolean postNewAnswer(long questionId, String answerContent);
+
+	boolean postNewAnswer(Question question, Answer answer);
 
 }
