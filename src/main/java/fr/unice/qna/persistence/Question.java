@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 public class Question extends Post implements Serializable {
@@ -17,9 +19,10 @@ public class Question extends Post implements Serializable {
 	private long timestamp;
 
 	@ManyToMany(cascade={CascadeType.PERSIST})
-	// @ElementCollection
-	// @ManyToMany
 	private Set<Tag> tags = new TreeSet<Tag>();
+
+	@OneToMany(cascade = {CascadeType.PERSIST})
+	private List<Answer> answers = new ArrayList<Answer>();
 
 	private static final long serialVersionUID = 1L;
 
@@ -85,8 +88,16 @@ public class Question extends Post implements Serializable {
 		this.tags = tags;
 	}
 
+	public List<Answer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<Answer> answers) {
+		this.answers = answers;
+	}
+
 	public String toString() {
-		return String.format("Question[id=%d, title=%s, detail=%s, timestamp=%d, tags=%s]", id, title, getDetail(), timestamp, tags.toString());
+		return String.format("Question[id=%d, title=%s, detail=%s, timestamp=%d, tags=%s, answers=%s]", id, title, getDetail(), timestamp, tags.toString(), answers.toString());
 	}
 
 	@Override
@@ -94,11 +105,14 @@ public class Question extends Post implements Serializable {
 		if(o == null || !(o instanceof Question)) { return false; }
 		Question q = (Question)o;
 		return id == q.id && title.equals(q.title) && timestamp==q.timestamp 
-			&& tags.equals(q.tags) && super.equals(o);
+			&& tags.equals(q.tags) && answers.equals(q.answers) 
+			&& super.equals(o);
 	}
 
 	@Override
 	public int hashCode() {
-		return (int)id + title.hashCode() + (int)timestamp + tags.hashCode() + super.hashCode();
+		return (int)id + title.hashCode() + (int)timestamp + 
+			tags.hashCode() + answers.hashCode() +
+			super.hashCode();
 	}
 }

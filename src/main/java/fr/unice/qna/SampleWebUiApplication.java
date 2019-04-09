@@ -28,6 +28,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 
+import java.util.List;
+import java.util.ArrayList;
+
 
 /*@Configuration
 @EnableAutoConfiguration
@@ -61,7 +64,15 @@ public class SampleWebUiApplication {
 			qrep.save(new Question("Number of continents","How many continents are there in the world ?", "Geography"));
 			qrep.save(new Question("Photosynthesis", "What is Photosynthesis ?", "Biology"));
 			qrep.save(new Question("Object Oriented Languages", "What are some Object Oriented Languages ?", "Software"));
-			qrep.save(new Question("Alternatives to Angular","Are there any front-end mvc frameworks other than Angular", "OO"));
+			Question qang = new Question("Alternatives to Angular","Are there any front-end mvc frameworks other than Angular", "OO");
+			Answer a1 = new Answer("VueJS");
+			Answer a2 = new Answer("ReactJS");
+			List<Answer> ans = new ArrayList<Answer>();
+			ans.add(a1);
+			ans.add(a2);
+			qang.setAnswers(ans);
+			System.out.println(qang);
+			System.out.println(qrep.save(qang));
 		};
 	}
 
