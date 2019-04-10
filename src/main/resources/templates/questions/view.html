@@ -112,18 +112,27 @@
 					let answerId = evt.target.getAttribute('data-id');
 					let url = '/answer/'+answerId +'/upVote';
 					fetch(url, {method:'PUT'}).then((res)=>{
-						console.log(res);
 						return res.text();
 					}).then((data)=>{
-						console.log('hi');
-						console.log(data);
 						if(data == 'true') {
-							console.log('data is true');
 							let upvotesSpan = document.querySelector('.answer .upvotes[data-id="'+answerId+'"]');
 							console.log(upvotesSpan);
 							incrementContent(upvotesSpan);
 						}
 					});
+				});
+			});
+
+			document.querySelectorAll('.a_downvote').forEach((downVoteButton, i)=>{
+				downVoteButton.addEventListener('click', (evt)=>{
+					let answerId = evt.target.getAttribute('data-id');
+					let url = '/answer/' + answerId + '/downVote';
+					fetch(url, {method: 'PUT'}).then((res)=>{
+						return res.text();
+					}).then((data)=>{
+						let downvotesSpan = document.querySelector('.answer .downvotes[data-id="'+answerId+'"]');
+						incrementContent(downvotesSpan);
+					})
 				});
 			});
 
