@@ -42,7 +42,16 @@
 			<button type="submit">Post your answer</button>
 		</form>
 
-		<div class="answer" th:each="a : ${question.answers}" th:text="${a.content}"></div>		
+		<div class="answer" th:each="a : ${question.answers}">
+			<p th:text="${a.content}"></p>
+			<p>
+				<span class="upvotes" th:attr="data-id=${a.id}" th:text="${a.upVotes}"></span> upvotes and 
+				<span class="downvotes" th:attr="data-id=${a.id}" th:text="${a.downVotes}"></span> downvotes.
+			</p>
+
+			<button class="a_upvote" th:attr="data-id=${a.id}" type="click">Upvote !</button>
+			<button class="a_downvote" th:attr="data-id=${a.id}" type="click">Downvote !</button>
+		</div>		
 
 	</div>
 
@@ -77,6 +86,7 @@
 			});
 
 
+			/* add tag to question */
 			document.getElementById('addTagButton').addEventListener('click', (evt)=>{
 				let addTagInput = document.getElementById('addTagInput');
 				let tag = addTagInput.value;
@@ -95,6 +105,33 @@
 					});
 				}
 			});
+
+			/* upvote answer */
+			document.querySelectorAll('.a_upvote').forEach((upVoteButton, i)=>{
+				upVoteButton.addEventListener('click', (evt)=>{
+					let answerId = evt.target.getAttribute('data-id');
+					let url = '/answer/'+answerId +'/upVote';
+					fetch(url, {method:'PUT'}).then((res)=>{
+						console.log(res);
+						return res.text();
+					}).then((data)=>{
+						console.log('hi');
+						console.log(data);
+						if(data == 'true') {
+							console.log('data is true');
+							let upvotesSpan = document.querySelector('.answer .upvotes[data-id="'+answerId+'"]');
+							console.log(upvotesSpan);
+							incrementContent(upvotesSpan);
+						}
+					});
+				});
+			});
+
+			function incrementContent(elt) {
+				elt.textContent = Number(elt.textContent) + 1;
+			}
+
+
 		});
 
 	</script>
