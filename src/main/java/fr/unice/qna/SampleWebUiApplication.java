@@ -54,7 +54,7 @@ public class SampleWebUiApplication {
 	}
 
 	@Bean
-	public CommandLineRunner insertSampleData(QuestionRepository qrep, TagRepository trep) {
+	public CommandLineRunner insertSampleData(QuestionRepository qrep, TagRepository trep, QnAUserRepository urep) {
 		return (String[] args) -> {
 
 			trep.save(new Tag("Physics"));
@@ -73,6 +73,13 @@ public class SampleWebUiApplication {
 			qang.setAnswers(ans);
 			System.out.println(qang);
 			System.out.println(qrep.save(qang));
+
+			QnAUser u1 = new QnAUser("Joe","joe@joe.com","apple");
+			QnAUser u2 = new QnAUser("Pierre","pierre@joe.com","orange");
+
+
+			urep.save(u1);
+			urep.save(u2);
 		};
 	}
 

@@ -1,6 +1,11 @@
 package fr.unice.qna;
 
+import fr.unice.qna.persistence.QnAUser;
+import fr.unice.qna.persistence.QnAUserRepository;
+
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,22 +19,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private BCryptPasswordEncoder encoder;
+	private QnAUserRepository qur;
 
-	public SecurityConfig() {
-		encoder = new BCryptPasswordEncoder();		
+	public SecurityConfig(QnAUserRepository qur) {
+		// encoder = new BCryptPasswordEncoder();		
+		this.qur = qur;
 	} 
 
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+		http
+			.authorizeRequests()
 			.anyRequest().authenticated()
 			.and()
-			.formLogin();
+			.formLogin()
+			.and()
+			.csrf()
+			.disable();
 	}
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+	/*@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {*/
 		/*UserDetailsManagerConfigurer imudmc = auth.inMemoryAuthentication();
 		imudmc = imudmc.passwordEncoder(encoder);
 		UserDetailsManagerConfigurer.UserDetailsBuilder udb = imudmc.withUser("Joe");
@@ -39,8 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		udb = imudmc.withUser("Pierre");
 		udb = udb.password(encoder.encode("orange"));
 		udb = udb.roles("USER","ADMIN");
-*/
-		auth.inMemoryAuthentication()
+		*/
+		/*auth.inMemoryAuthentication()
 			.passwordEncoder(encoder)
 			.withUser("Joe")
 			.password(encoder.encode("apple"))
@@ -48,8 +59,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.withUser("Pierre")
 			.password(encoder.encode("orange"))
-			.roles("USER","ADMIN");
+			.roles("USER","ADMIN");*/
+
+	/*	UserDetails u1 = new QnAUser("Joe","apple","joe@joe.com");
+		UserDetails u2 = new QnAUser("Pierre","orange","pierre@joe.com");
+
+		
+	}*/
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder amb) throws Exception {
+		amb.userDetailsService(this.qur)		
+			.passwordEncoder(getEncoder());
 	}
+
+	@Bean
+	public BCryptPasswordEncoder getEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	/*@Bean
+	public QnAUserRepository getQnAUserRepository() {
+		return new QnAUserRepository();
+	}*/
 
 
 }

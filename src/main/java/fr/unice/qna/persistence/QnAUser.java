@@ -2,12 +2,16 @@ package fr.unice.qna.persistence;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class QnAUser implements Serializable, UserDetails {
@@ -20,6 +24,8 @@ public class QnAUser implements Serializable, UserDetails {
 	private String email;
 	private String password;
 
+	private static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
 	public QnAUser() {
 
 	}
@@ -27,7 +33,8 @@ public class QnAUser implements Serializable, UserDetails {
 	public QnAUser(String username, String email, String password) {
 		this.username = username;
 		this.email = email;
-		this.password = password;
+		this.password = encoder.encode(password);
+		System.out.println(this.password);
 	}
 
 	public String getUsername() {
@@ -51,7 +58,7 @@ public class QnAUser implements Serializable, UserDetails {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = encoder.encode(password);
 	}
 
 	public String toString() {
@@ -75,12 +82,16 @@ public class QnAUser implements Serializable, UserDetails {
 	}
 
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return new ArrayList<GrantedAuthority>();
+		List<GrantedAuthority> res = new ArrayList<GrantedAuthority>();
+		res.add(new SimpleGrantedAuthority("USER"));
+		return res;
 	}
 
 	@Override
 	public int hashCode() {
-		return username.hashCode() + password.hashCode() + email.hashCode();
+		return username.hashCode() + password.hashCode() 
+			+ email.hashCode()
+			+ getAuthorities().hashCode();
 	}
 
 	@Override
@@ -88,7 +99,7 @@ public class QnAUser implements Serializable, UserDetails {
 		if(o instanceof QnAUser) {
 			QnAUser u = (QnAUser)o;
 			return username.equals(u.username) && password.equals(u.password)
-				&& email.equals(u.email);
+				&& email.equals(u.email) && getAuthorities().equals(u.getAuthorities());
 		}
 		return false;
 	}
