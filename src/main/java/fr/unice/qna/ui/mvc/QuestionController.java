@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -57,7 +58,7 @@ public class QuestionController {
 	}
 
 	@GetMapping("/{id}")
-	public String view(@PathVariable("id") long id, Model model) {
+	public String view(@PathVariable("id") long id, Model model, Principal p) {
 		Optional<Question> questionOpt = questRep.findById(id);
 		if(!questionOpt.isPresent()) {
 			return "redirect:/questions/";

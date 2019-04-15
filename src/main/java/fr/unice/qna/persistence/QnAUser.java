@@ -34,7 +34,6 @@ public class QnAUser implements Serializable, UserDetails {
 		this.username = username;
 		this.email = email;
 		this.password = encoder.encode(password);
-		System.out.println(this.password);
 	}
 
 	public String getUsername() {
