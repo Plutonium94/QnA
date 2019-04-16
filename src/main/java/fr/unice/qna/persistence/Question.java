@@ -108,7 +108,7 @@ public class Question extends Post implements Serializable {
 	}
 
 	public String toString() {
-		return String.format("Question[id=%d, title=%s, detail=%s, timestamp=%d, tags=%s, acceptedAnswer=%s, answers=%s]", id, title, getDetail(), timestamp, tags.toString(), acceptedAnswer, answers.toString());
+		return String.format("Question[id=%d, title=%s, detail=%s, author=%s, timestamp=%d, tags=%s, acceptedAnswer=%s, answers=%s]", id, title, getDetail(), getAuthor().getUsername(), timestamp, tags.toString(), acceptedAnswer, answers.toString());
 	}
 
 	@Override

@@ -82,4 +82,12 @@ public class QuestionRepositoryCustomImpl implements QuestionRepositoryCustom {
 		return true;
 	}
 
+	@Transactional
+	public boolean rejectAcceptedAnswer(long questionId) {
+		Question question = em.find(Question.class, questionId);
+		if(question == null) { return false; }
+		question.setAcceptedAnswer(null);
+		return true;
+	}
+
 }

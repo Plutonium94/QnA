@@ -112,6 +112,11 @@ public class QuestionController {
 		return questRep.acceptAnswer(qid, aid);
 	}
 
+	@PostMapping("/{qid}/reject-accepted-answer")
+	public @ResponseBody boolean rejectAcceptedAnswer(@PathVariable("qid") long qid) {
+		return questRep.rejectAcceptedAnswer(qid);
+	}
+
 	/*@PostMapping("/{id}/new-answer")
 	public @ResponseBody boolean postNewAnswer(@PathVariable("id") long id, String answerContent) {
 		return questRep.postNewAnswer(id,answerContent);

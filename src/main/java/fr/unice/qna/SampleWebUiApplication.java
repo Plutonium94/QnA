@@ -61,6 +61,13 @@ public class SampleWebUiApplication {
 			trep.save(new Tag("Sports"));
 			trep.save(new Tag("Volleyball"));
 
+			QnAUser u1 = new QnAUser("Joe","joe@joe.com","apple");
+			QnAUser u2 = new QnAUser("Pierre","pierre@joe.com","orange");
+
+
+			urep.save(u1);
+			u2 = urep.save(u2);
+
 			qrep.save(new Question("Number of continents","How many continents are there in the world ?", "Geography"));
 			qrep.save(new Question("Photosynthesis", "What is Photosynthesis ?", "Biology"));
 			qrep.save(new Question("Object Oriented Languages", "What are some Object Oriented Languages ?", "Software"));
@@ -71,15 +78,10 @@ public class SampleWebUiApplication {
 			ans.add(a1);
 			ans.add(a2);
 			qang.setAnswers(ans);
+			qang.setAuthor(u2);
 			System.out.println(qang);
 			System.out.println(qrep.save(qang));
 
-			QnAUser u1 = new QnAUser("Joe","joe@joe.com","apple");
-			QnAUser u2 = new QnAUser("Pierre","pierre@joe.com","orange");
-
-
-			urep.save(u1);
-			urep.save(u2);
 		};
 	}
 

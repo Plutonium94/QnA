@@ -33,6 +33,7 @@ public class Tag implements Comparable<Tag>, Serializable {
 
 	@Override
 	public boolean equals(Object o) {
+		if(o == null) { return false; }
 		if(o instanceof Tag) {
 			Tag t = (Tag)o;
 			return t.name.equals(name);

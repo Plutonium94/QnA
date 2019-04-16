@@ -49,9 +49,15 @@
 				<span class="downvotes" th:attr="data-id=${a.id}" th:text="${a.downVotes}"></span> downvotes.
 			</p>
 
-			<p th:if="${viewerIsAuthor}">
-				<button type="button" th:attr="data-id=${a.id}" class="accept">
+			<p th:if="${viewerIsAuthor} and ${!a.equals(question.acceptedAnswer)}">
+				<button type="button" th:attr="data-id=${a.id}" data-action="accept">
 					Mark answer as accepted
+				</button>
+			</p>
+
+			<p th:if="${viewerIsAuthor} and ${a.equals(question.acceptedAnswer)}">
+				<button type="button" th:attr="data-id=${a.id}" data-action="reject">
+					Unmark answer as accepted
 				</button>
 			</p>
 
@@ -144,29 +150,74 @@
 				});
 			});
 
-			document.querySelectorAll('button.accept[data-id]').forEach((acceptButton,i)=>{
-				acceptButton.addEventListener('click', (evt)=>{
-					let answerId = evt.target.getAttribute('data-id');
-					let url = [[@{/questions/{qid}/accept/(qid=${question.id})}]] + answerId;
-					fetch(url, {method: 'POST'}).then((res)=>{
-						return res.text();
-					}).then((data)=>{
-						if(data=='true') {
-							let existingAnswer = document.querySelector('.answer[data-accepted="true"]');
-
-							if(existingAnswer) {
-								existingAnswer.setAttribute('data-accepted','false');
-							}
-
-							let acceptedAnswer = document.querySelector('.answer[data-id="'+answerId+'"]');
-							acceptedAnswer.setAttribute('data-accepted','true');
-						}
-					});
+			document.querySelectorAll('button[data-action][data-id]').forEach((button,i)=>{
+				button.addEventListener('click', (evt)=>{
+					let ansButton = evt.target;
+					let answerId = ansButton.getAttribute('data-id');
+					let ansElement = document.querySelector('.answer[data-id="'+ answerId +'"]');
+					if(ansButton.getAttribute('data-action') == 'accept') {
+						callAcceptAnswer(ansElement, answerId);
+					} else {
+						callRejectAnswer(ansElement, answerId);
+					}
 				});
 			});
 
+			function callAcceptAnswer(ansElement, answerId) {
+				let url = [[@{/questions/{qid}/accept/(qid=${question.id})}]] + answerId;
+				fetch(url, {method: 'POST'}).then((res)=>{
+					return res.text();
+				}).then((data)=>{
+					if(data=='true') {
+						let existingAnswer = document.querySelector('.answer[data-accepted="true"]');
+
+						if(existingAnswer) {
+							makeAnswerRejected(existingAnswer);
+							// existingAnswer.setAttribute('data-accepted','false');
+							// let existingAnswerButton  = existingAnswer.
+							// 	querySelector('button[data-action="reject"]');
+							// existingAnswerButton.setAttribute('data-action','accept');
+							// existingAnswerButton.
+
+						}
+						// acceptedAnswer.setAttribute('data-accepted','true');
+						makeAnswerAccepted(ansElement);
+					}
+				});
+			}
+
+			function callRejectAnswer(ansElement, answerId) {
+				let url = [[@{/questions/{qid}/reject-accepted-answer(qid=${question.id})}]];
+				fetch(url, {method: 'POST'}).then((res)=>{
+					return res.text();
+				}).then((data)=>{
+					if(data == 'true') {
+						let existingAnswer = document.querySelector('.answer[data-accepted="true"]');
+						console.log(existingAnswer);
+
+						if(existingAnswer) {
+							makeAnswerRejected(existingAnswer);
+						}
+					}
+				});
+			}
+
 			function incrementContent(elt) {
 				elt.textContent = Number(elt.textContent) + 1;
+			}
+
+			function makeAnswerAccepted(ansElement) {
+				ansElement.setAttribute('data-accepted','true');
+				let ansButton = ansElement.querySelector('button[data-action="accept"]');
+				ansButton.setAttribute('data-action','reject');
+				ansButton.textContent = 'Unmark answer as accepted';
+			}
+
+			function makeAnswerRejected(ansElement) {
+				ansElement.setAttribute('data-accepted','false');
+				let ansButton = ansElement.querySelector('button[data-action="reject"]');
+				ansButton.setAttribute('data-action', 'accept');
+				ansButton.textContent = 'Mark answer as accepted';
 			}
 
 

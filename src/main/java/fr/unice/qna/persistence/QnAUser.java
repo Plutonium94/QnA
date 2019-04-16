@@ -95,6 +95,7 @@ public class QnAUser implements Serializable, UserDetails {
 
 	@Override
 	public boolean equals(Object o) {
+		if(o == null) { return false; }
 		if(o instanceof QnAUser) {
 			QnAUser u = (QnAUser)o;
 			return username.equals(u.username) && password.equals(u.password)

@@ -17,5 +17,7 @@ public interface QuestionRepositoryCustom {
 
 	boolean acceptAnswer(long questionId, long answerId);
 
+	boolean rejectAcceptedAnswer(long questionId);
+
 
 }

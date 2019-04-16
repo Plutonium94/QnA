@@ -69,6 +69,7 @@ public class Post {
 	}
 
 	public boolean equals(Object o) {
+		if(o == null) { return false; }
 		if(o instanceof Post) {
 			Post p = (Post)o;
 			return content.equals(p.content) && upVotes == p.upVotes && downVotes == p.downVotes

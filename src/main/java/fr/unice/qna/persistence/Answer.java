@@ -32,6 +32,7 @@ public class Answer extends Post implements Serializable {
 
 	@Override
 	public boolean equals(Object o) {
+		if(o == null) { return false; }
 		if(o instanceof Answer) {
 			Answer a = (Answer)o;
 			return id == a.id && super.equals(a);
