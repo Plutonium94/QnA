@@ -9,12 +9,21 @@ public class Post {
 	private int upVotes;
 	private int downVotes;
 
+	@OneToOne(orphanRemoval=false)
+	private QnAUser author;
+
+
 	public Post() {
 
 	}
 
 	public Post(String content) {
 		this.content = content;
+	}
+
+	public Post(String content, QnAUser author) {
+		this.content = content;
+		this.author = author;
 	}
 
 	public Post(String content, int upVotes, int downVotes) {
@@ -47,14 +56,23 @@ public class Post {
 		this.downVotes = downVotes;
 	}
 
+	public QnAUser getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(QnAUser author) {
+		this.author = author;
+	}
+
 	public int hashCode() {
-		return content.hashCode() + upVotes + downVotes;
+		return content.hashCode() + upVotes + downVotes + author.hashCode();
 	}
 
 	public boolean equals(Object o) {
 		if(o instanceof Post) {
 			Post p = (Post)o;
-			return content.equals(p.content) && upVotes == p.upVotes && downVotes == p.downVotes;
+			return content.equals(p.content) && upVotes == p.upVotes && downVotes == p.downVotes
+				&& author.equals(p.author);
 		}
 		return false;
 	}

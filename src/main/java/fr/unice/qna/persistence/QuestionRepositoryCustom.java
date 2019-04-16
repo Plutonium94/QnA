@@ -15,4 +15,7 @@ public interface QuestionRepositoryCustom {
 
 	boolean postNewAnswer(Question question, Answer answer);
 
+	boolean acceptAnswer(long questionId, long answerId);
+
+
 }

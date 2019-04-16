@@ -33,6 +33,9 @@ public class QuestionController {
 	@Autowired
 	private TagRepository tagRep;
 
+	@Autowired
+	private QnAUserRepository userRep;
+
 	@RequestMapping(value = "/new", method={RequestMethod.GET})
 	public String showNewForm(Model model) {
 		model.addAttribute("question", new Question());
@@ -40,7 +43,9 @@ public class QuestionController {
 	}	
 
 	@PostMapping("/new")
-	public String newFormSubmit(@ModelAttribute Question question, BindingResult br, Model model) {
+	public String newFormSubmit(@ModelAttribute Question question, BindingResult br, Model model, Principal p) {
+		QnAUser author = userRep.getOne(p.getName());
+		question.setAuthor(author);
 		Question qRes = questRep.save(question);
 		if(qRes != null) {
 			// model.addAttribute("question",qRes);
@@ -59,15 +64,19 @@ public class QuestionController {
 
 	@GetMapping("/{id}")
 	public String view(@PathVariable("id") long id, Model model, Principal p) {
+		System.out.println(p);
 		Optional<Question> questionOpt = questRep.findById(id);
 		if(!questionOpt.isPresent()) {
 			return "redirect:/questions/";
 		} else {
 			Question question = questionOpt.get();
-			System.out.println(question);
+
+			QnAUser author = question.getAuthor();
+			boolean viewerIsAuthor = p != null && author != null  && p.getName().equals(author.getUsername());
+    
 			model.addAttribute("question",question);
-			String title = question.getTitle();
-			model.addAttribute("shortedTitle", (title.length() <= 8)?title: (title.substring(0,8) + "..."));
+			model.addAttribute("viewerIsAuthor", viewerIsAuthor);
+			model.addAttribute("shortedTitle", shorten(question.getTitle(), 8));
 			model.addAttribute("allTags",tagRep.findAll());
 			model.addAttribute("newAnswer", new Answer());
 			return "questions/view";
@@ -98,9 +107,18 @@ public class QuestionController {
 		return "redirect:/questions/{id}";
 	}
 
+	@PostMapping("/{qid}/accept/{aid}")
+	public @ResponseBody boolean acceptAnswer(@PathVariable("qid") long qid, @PathVariable("aid") long aid) {
+		return questRep.acceptAnswer(qid, aid);
+	}
+
 	/*@PostMapping("/{id}/new-answer")
 	public @ResponseBody boolean postNewAnswer(@PathVariable("id") long id, String answerContent) {
 		return questRep.postNewAnswer(id,answerContent);
 	}*/
+
+	private static String shorten(String s, int shortenedLength) {
+		return (s.length() <= shortenedLength)?s: (s.substring(0,shortenedLength) + "...");
+	}
 
 }

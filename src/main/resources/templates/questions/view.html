@@ -42,11 +42,17 @@
 			<button type="submit">Post your answer</button>
 		</form>
 
-		<div class="answer" th:each="a : ${question.answers}">
+		<div class="answer" th:each="a : ${question.answers}" th:attr="data-id=${a.id}" data-accepted="false">
 			<p th:text="${a.content}"></p>
 			<p>
 				<span class="upvotes" th:attr="data-id=${a.id}" th:text="${a.upVotes}"></span> upvotes and 
 				<span class="downvotes" th:attr="data-id=${a.id}" th:text="${a.downVotes}"></span> downvotes.
+			</p>
+
+			<p th:if="${viewerIsAuthor}">
+				<button type="button" th:attr="data-id=${a.id}" class="accept">
+					Mark answer as accepted
+				</button>
 			</p>
 
 			<button class="a_upvote" th:attr="data-id=${a.id}" type="click">Upvote !</button>
@@ -130,9 +136,32 @@
 					fetch(url, {method: 'PUT'}).then((res)=>{
 						return res.text();
 					}).then((data)=>{
-						let downvotesSpan = document.querySelector('.answer .downvotes[data-id="'+answerId+'"]');
-						incrementContent(downvotesSpan);
+						if(data == 'true') {
+							let downvotesSpan = document.querySelector('.answer .downvotes[data-id="'+answerId+'"]');
+							incrementContent(downvotesSpan);
+						}
 					})
+				});
+			});
+
+			document.querySelectorAll('button.accept[data-id]').forEach((acceptButton,i)=>{
+				acceptButton.addEventListener('click', (evt)=>{
+					let answerId = evt.target.getAttribute('data-id');
+					let url = [[@{/questions/{qid}/accept/(qid=${question.id})}]] + answerId;
+					fetch(url, {method: 'POST'}).then((res)=>{
+						return res.text();
+					}).then((data)=>{
+						if(data=='true') {
+							let existingAnswer = document.querySelector('.answer[data-accepted="true"]');
+
+							if(existingAnswer) {
+								existingAnswer.setAttribute('data-accepted','false');
+							}
+
+							let acceptedAnswer = document.querySelector('.answer[data-id="'+answerId+'"]');
+							acceptedAnswer.setAttribute('data-accepted','true');
+						}
+					});
 				});
 			});
 
@@ -147,6 +176,7 @@
 
 	<style>
 		.tag {margin-right: 7px;}
+		.answer[data-accepted=true]{ background-color: limegreen;}
 	</style>
 </body>
 </html>

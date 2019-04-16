@@ -10,4 +10,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long>, Quest
 
 	List<Question> findAllByOrderByTimestampDesc();
 
+
+
 }

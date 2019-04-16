@@ -18,6 +18,9 @@ public class Question extends Post implements Serializable {
 	private String title;
 	private long timestamp;
 
+	@OneToOne
+	private Answer acceptedAnswer;
+
 	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<Tag> tags = new TreeSet<Tag>();
 
@@ -88,6 +91,14 @@ public class Question extends Post implements Serializable {
 		this.tags = tags;
 	}
 
+	public Answer getAcceptedAnswer() {
+		return acceptedAnswer;
+	}
+
+	public void setAcceptedAnswer(Answer acceptedAnswer) {
+		this.acceptedAnswer = acceptedAnswer;
+	}
+
 	public List<Answer> getAnswers() {
 		return answers;
 	}
@@ -97,7 +108,7 @@ public class Question extends Post implements Serializable {
 	}
 
 	public String toString() {
-		return String.format("Question[id=%d, title=%s, detail=%s, timestamp=%d, tags=%s, answers=%s]", id, title, getDetail(), timestamp, tags.toString(), answers.toString());
+		return String.format("Question[id=%d, title=%s, detail=%s, timestamp=%d, tags=%s, acceptedAnswer=%s, answers=%s]", id, title, getDetail(), timestamp, tags.toString(), acceptedAnswer, answers.toString());
 	}
 
 	@Override
@@ -105,14 +116,15 @@ public class Question extends Post implements Serializable {
 		if(o == null || !(o instanceof Question)) { return false; }
 		Question q = (Question)o;
 		return id == q.id && title.equals(q.title) && timestamp==q.timestamp 
-			&& tags.equals(q.tags) && answers.equals(q.answers) 
+			&& tags.equals(q.tags) && acceptedAnswer.equals(q.acceptedAnswer)
+			&& answers.equals(q.answers) 
 			&& super.equals(o);
 	}
 
 	@Override
 	public int hashCode() {
 		return (int)id + title.hashCode() + (int)timestamp + 
-			tags.hashCode() + answers.hashCode() +
+			tags.hashCode() + acceptedAnswer.hashCode() + answers.hashCode() +
 			super.hashCode();
 	}
 }
