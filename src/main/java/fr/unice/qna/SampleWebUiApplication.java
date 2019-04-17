@@ -65,22 +65,42 @@ public class SampleWebUiApplication {
 			QnAUser u2 = new QnAUser("Pierre","pierre@joe.com","orange");
 
 
-			urep.save(u1);
+			u1 = urep.save(u1);
 			u2 = urep.save(u2);
 
-			qrep.save(new Question("Number of continents","How many continents are there in the world ?", "Geography"));
-			qrep.save(new Question("Photosynthesis", "What is Photosynthesis ?", "Biology"));
-			qrep.save(new Question("Object Oriented Languages", "What are some Object Oriented Languages ?", "Software"));
+			System.out.println("===============");
+
+
+			System.out.println(u1);
+			System.out.println(u2);
+
+			System.out.println("===============");
+
+			Question q1 = new Question("Number of continents","How many continents are there in the world ?", "Geography");
+			Question q2 = new Question("Photosynthesis", "What is Photosynthesis ?", "Biology");
+			Question q3 = new Question("Object Oriented Languages", "What are some Object Oriented Languages ?", "Software");
+
+			q1.setAuthor(u1);
+			q2.setAuthor(u2);
+			q3.setAuthor(u1);
+
+			for(Question q : new Question[]{q1,q2,q3}) {
+				qrep.save(q);
+			}
+
 			Question qang = new Question("Alternatives to Angular","Are there any front-end mvc frameworks other than Angular", "OO");
-			Answer a1 = new Answer("VueJS");
-			Answer a2 = new Answer("ReactJS");
+			Answer a1 = new Answer("VueJS"); a1.setAuthor(u1);
+			Answer a2 = new Answer("ReactJS"); a2.setAuthor(u2);
 			List<Answer> ans = new ArrayList<Answer>();
 			ans.add(a1);
 			ans.add(a2);
 			qang.setAnswers(ans);
 			qang.setAuthor(u2);
 			System.out.println(qang);
+			System.out.println(qang.getAuthor());
 			System.out.println(qrep.save(qang));
+
+
 
 		};
 	}

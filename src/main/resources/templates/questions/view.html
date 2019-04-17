@@ -42,7 +42,7 @@
 			<button type="submit">Post your answer</button>
 		</form>
 
-		<div class="answer" th:each="a : ${question.answers}" th:attr="data-id=${a.id}" data-accepted="false">
+		<div class="answer" th:each="a : ${question.answers}" th:attr="data-id=${a.id}, data-accepted=${a.equals(question.acceptedAnswer)}">
 			<p th:text="${a.content}"></p>
 			<p>
 				<span class="upvotes" th:attr="data-id=${a.id}" th:text="${a.upVotes}"></span> upvotes and 
@@ -84,6 +84,7 @@
 				});
 			});
 
+			/* downvote question */
 			document.getElementById('q_downvote').addEventListener('click', (evt)=>{
 				let url = [[@{/questions/downvote/{qid}(qid=${question.id})}]];
 				fetch(url, {method: 'PUT'}).then((res)=>{
@@ -135,6 +136,7 @@
 				});
 			});
 
+			/* downvote answer */
 			document.querySelectorAll('.a_downvote').forEach((downVoteButton, i)=>{
 				downVoteButton.addEventListener('click', (evt)=>{
 					let answerId = evt.target.getAttribute('data-id');

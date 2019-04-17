@@ -50,10 +50,13 @@ public class QuestionRepositoryCustomImpl implements QuestionRepositoryCustom {
 	}
 
 	@Transactional
-	public boolean postNewAnswer(long questionId, String answerContent) {
+	public boolean postNewAnswer(long questionId, String answerContent, String authorName) {
+		QnAUser author = em.find(QnAUser.class, authorName);
+		if(author == null) { return false; }
 		Question question = em.find(Question.class, questionId);
 		if(question == null) { return false; }
 		Answer answer = new Answer(answerContent);
+		answer.setAuthor(author);
 		List<Answer> existingAnswers = question.getAnswers();
 		existingAnswers.add(answer);
 		return true;

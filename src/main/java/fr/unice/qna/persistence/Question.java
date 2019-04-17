@@ -18,7 +18,7 @@ public class Question extends Post implements Serializable {
 	private String title;
 	private long timestamp;
 
-	@OneToOne
+	@OneToOne(optional=true)
 	private Answer acceptedAnswer;
 
 	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE})
@@ -116,7 +116,8 @@ public class Question extends Post implements Serializable {
 		if(o == null || !(o instanceof Question)) { return false; }
 		Question q = (Question)o;
 		return id == q.id && title.equals(q.title) && timestamp==q.timestamp 
-			&& tags.equals(q.tags) && acceptedAnswer.equals(q.acceptedAnswer)
+			&& tags.equals(q.tags) 
+			&& ((acceptedAnswer == null && q.acceptedAnswer == null) || acceptedAnswer.equals(q.acceptedAnswer))
 			&& answers.equals(q.answers) 
 			&& super.equals(o);
 	}
@@ -124,7 +125,8 @@ public class Question extends Post implements Serializable {
 	@Override
 	public int hashCode() {
 		return (int)id + title.hashCode() + (int)timestamp + 
-			tags.hashCode() + acceptedAnswer.hashCode() + answers.hashCode() +
+			tags.hashCode() + ((acceptedAnswer ==null)?0:acceptedAnswer.hashCode())
+			+ answers.hashCode() +
 			super.hashCode();
 	}
 }

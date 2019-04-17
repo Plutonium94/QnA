@@ -11,7 +11,7 @@ public interface QuestionRepositoryCustom {
 
 	boolean addTag(long questionId, String tagName);
 
-	boolean postNewAnswer(long questionId, String answerContent);
+	boolean postNewAnswer(long questionId, String answerContent, String authorName);
 
 	boolean postNewAnswer(Question question, Answer answer);
 

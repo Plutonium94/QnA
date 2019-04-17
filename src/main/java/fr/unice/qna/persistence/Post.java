@@ -9,7 +9,8 @@ public class Post {
 	private int upVotes;
 	private int downVotes;
 
-	@OneToOne(orphanRemoval=false)
+	@ManyToOne(optional=false)
+	// @OneToOne(optional=false) causes primary key violation, @OneToOne does not
 	private QnAUser author;
 
 

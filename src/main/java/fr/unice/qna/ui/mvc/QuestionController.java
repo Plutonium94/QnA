@@ -99,11 +99,11 @@ public class QuestionController {
 	}
 
 	@PostMapping("/{id}/new-answer")
-	public String postNewAnswer(@PathVariable("id") long id,  @ModelAttribute("newAnswer") Answer newAnswer, @ModelAttribute("question") Question question, Model model, BindingResult br) {
+	public String postNewAnswer(@PathVariable("id") long id,  @ModelAttribute("newAnswer") Answer newAnswer, @ModelAttribute("question") Question question, Model model, BindingResult br, Principal p) {
 		System.out.println(newAnswer);
 		// System.out.println(model);
 		// questRep.postNewAnswer(question, newAnswer);
-		questRep.postNewAnswer(id, newAnswer.getContent());
+		questRep.postNewAnswer(id, newAnswer.getContent(), p.getName());
 		return "redirect:/questions/{id}";
 	}
 
