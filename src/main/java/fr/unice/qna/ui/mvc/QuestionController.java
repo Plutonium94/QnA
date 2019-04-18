@@ -2,7 +2,6 @@ package fr.unice.qna.ui.mvc;
 
 import fr.unice.qna.persistence.*;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;

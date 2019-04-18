@@ -43,6 +43,7 @@ public class QuestionRepositoryCustomImpl implements QuestionRepositoryCustom {
 		if(tagToBeAdded == null) {
 			tagToBeAdded = new Tag(tagName);
 		}
+		tagToBeAdded.getAssociatedQuestions().add(question);
 
 		tags.add(tagToBeAdded);
 		em.persist(question);

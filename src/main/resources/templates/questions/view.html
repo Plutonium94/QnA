@@ -4,6 +4,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
 	<title th:text="${'QnA - ' + shortedTitle}"></title>
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
 </head>
 <body>
 
@@ -152,6 +153,7 @@
 				});
 			});
 
+			/* handle click on "Accept" or "Reject" answer buttons */
 			document.querySelectorAll('button[data-action][data-id]').forEach((button,i)=>{
 				button.addEventListener('click', (evt)=>{
 					let ansButton = evt.target;

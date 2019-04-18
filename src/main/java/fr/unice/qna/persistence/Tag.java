@@ -2,12 +2,16 @@ package fr.unice.qna.persistence;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.*;
 
 @Entity
 public class Tag implements Comparable<Tag>, Serializable {
 
 	@Id
 	private String name;
+
+	@ManyToMany
+	private Set<Question> associatedQuestions = new HashSet<Question>(); 
 
 	public Tag() {
 		this("");
@@ -25,6 +29,14 @@ public class Tag implements Comparable<Tag>, Serializable {
 		this.name = name;
 	}
 
+	public Set<Question> getAssociatedQuestions() {
+		return associatedQuestions;
+	}
+
+	public void setAssociatedQuestions(Set<Question> associatedQuestions) {
+		this.associatedQuestions = associatedQuestions;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -36,7 +48,7 @@ public class Tag implements Comparable<Tag>, Serializable {
 		if(o == null) { return false; }
 		if(o instanceof Tag) {
 			Tag t = (Tag)o;
-			return t.name.equals(name);
+			return t.name.equals(name) && associatedQuestions.equals(t.associatedQuestions);
 		}
 		return false;
 	}

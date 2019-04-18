@@ -124,9 +124,10 @@ public class Question extends Post implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return (int)id + title.hashCode() + (int)timestamp + 
-			tags.hashCode() + ((acceptedAnswer ==null)?0:acceptedAnswer.hashCode())
-			+ answers.hashCode() +
-			super.hashCode();
+		int res = (int)id + title.hashCode() + (int)timestamp;
+		if(acceptedAnswer != null) {
+			res += acceptedAnswer.hashCode();
+		}
+		return res + tags.hashCode() + super.hashCode();
 	}
 }
