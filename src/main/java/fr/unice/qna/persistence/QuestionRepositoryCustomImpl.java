@@ -138,14 +138,15 @@ public class QuestionRepositoryCustomImpl implements QuestionRepositoryCustom {
 	@Transactional
 	public Set<Question> findRelatedQuestions(long questionId) {
 		Set<Tag> res = new TreeSet<Tag>();
-		Question question = em.find(Question.class, questionId);
+		/*Question question = em.find(Question.class, questionId);
 		Set<Tag> tags = question.getTags();
 		Set<String> tagNames = new TreeSet<String>();
 		for(Tag t : tags) {
 			tagNames.add(t.getName());
-		}
-		List<Question> resList = em.createQuery("Select q from Question q join q.tags t where t.name in :names", Question.class)
-			.setParameter("names",tagNames)
+		}*/
+		List<Question> resList = em.createQuery("Select q from Question q join q.tags t where t.name in (select  t2.name from Question q2 join q2.tags t2 where q2.id = :qid ) and q.id != :qid", Question.class)
+			// .setParameter("names",tagNames)
+			.setParameter("qid",questionId)
 			.getResultList();
 		return new HashSet<Question>(resList);
 	}
