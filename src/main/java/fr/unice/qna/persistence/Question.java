@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +23,8 @@ public class Question extends Post implements Serializable {
 	private Answer acceptedAnswer;
 
 	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE})
-	private Set<Tag> tags = new TreeSet<Tag>();
+	@OrderBy("name")
+	private SortedSet<Tag> tags = new TreeSet<Tag>();
 
 	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<Answer> answers = new ArrayList<Answer>();
@@ -47,8 +49,11 @@ public class Question extends Post implements Serializable {
 	public Question(String title, String detail, String... tagNames) {
 		this(title, detail);
 		for(String tn : tagNames) {
-			this.tags.add(new Tag(tn));
+			Tag t = new Tag(tn);
+			this.tags.add(t);
+			// t.getAssociatedQuestions().add(this);
 		}
+		System.out.println(this.tags);
 	}
 
 	public long getId() {
@@ -83,12 +88,25 @@ public class Question extends Post implements Serializable {
 		return timestamp;
 	}
 
-	public Set<Tag> getTags() {
+	public SortedSet<Tag> getTags() {
 		return tags;
 	}
 
-	public void setTags(Set<Tag> tags) {
+	public void setTags(SortedSet<Tag> tags) {
 		this.tags = tags;
+		for(Tag t : this.tags) {
+			t.getAssociatedQuestions().add(this);
+		}
+	}
+
+	public void addTag(Tag t) {
+		if(this.tags.add(t)) {
+			t.getAssociatedQuestions().add(this);
+		}
+	}
+
+	public void addTag(String t) {
+		this.addTag(new Tag(t));
 	}
 
 	public Answer getAcceptedAnswer() {

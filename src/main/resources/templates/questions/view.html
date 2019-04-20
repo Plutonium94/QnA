@@ -13,6 +13,8 @@
 	<h1 th:text="${question.title}"></h1>
 
 	<p th:text="${question.detail}"></p>
+
+	<p th:text="${'asked by ' + question.author.username}"></p>
 	
 	<p>
 		<span id="q_upvotes" th:text="${question.upVotes}"></span>
@@ -34,6 +36,8 @@
 	<datalist id="allTags">
 		<option th:each="t : ${allTags}" th:value="${t.name}">
 	</datalist>
+
+	<p><a th:href="@{/questions/}">Back to question list.</a></p>
 
 	<div id="answers">
 
@@ -64,7 +68,18 @@
 
 			<button class="a_upvote" th:attr="data-id=${a.id}" type="click">Upvote !</button>
 			<button class="a_downvote" th:attr="data-id=${a.id}" type="click">Downvote !</button>
+
 		</div>		
+
+		<div id="relatedQuestions">
+
+			<p th:each="rq : ${relatedQuestions}">
+				<a th:href="@{/questions/{rqid}(rqid=${rq.id})}"
+					th:text="${rq.title}">
+				</a>
+			</p>
+
+		</div>
 
 	</div>
 

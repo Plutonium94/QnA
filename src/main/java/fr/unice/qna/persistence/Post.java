@@ -15,7 +15,7 @@ public class Post {
 
 
 	public Post() {
-
+		this("");
 	}
 
 	public Post(String content) {
@@ -66,7 +66,9 @@ public class Post {
 	}
 
 	public int hashCode() {
-		return content.hashCode() + upVotes + downVotes + author.hashCode();
+		int res = content.hashCode() + upVotes + downVotes;
+		res += (author==null)?0:author.hashCode();
+		return res;
 	}
 
 	public boolean equals(Object o) {

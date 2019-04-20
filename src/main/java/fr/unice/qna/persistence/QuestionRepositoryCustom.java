@@ -1,9 +1,11 @@
 package fr.unice.qna.persistence;
 
 import javax.persistence.EntityManager;
-
+import java.util.*;
 
 public interface QuestionRepositoryCustom {
+
+	Question create(String title, String content, String authorName);
 
 	boolean upVote(long questionId);
 
@@ -18,6 +20,10 @@ public interface QuestionRepositoryCustom {
 	boolean acceptAnswer(long questionId, long answerId);
 
 	boolean rejectAcceptedAnswer(long questionId);
+
+	SortedSet<Question> findRelatedQuestions(long questionId, int max);
+
+	Set<Question> findRelatedQuestions(long questionId);
 
 
 }

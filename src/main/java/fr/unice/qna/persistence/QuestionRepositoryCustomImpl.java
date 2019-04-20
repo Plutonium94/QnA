@@ -13,6 +13,22 @@ public class QuestionRepositoryCustomImpl implements QuestionRepositoryCustom {
 	@PersistenceContext
 	private EntityManager em;
 
+	private Comparator<Question> questionComparator;
+
+	public QuestionRepositoryCustomImpl() {
+		this.questionComparator = new RecentQuestionComparator();
+	}
+
+	@Transactional
+	public Question create(String title, String detail, String authorName) {
+		QnAUser author = em.find(QnAUser.class, authorName);
+		if(author == null) { System.out.printf("x%sx author not found", authorName); return null; }
+		Question res = new Question(title, detail);
+		res.setAuthor(author);
+		em.persist(res);
+		return res;
+	}
+
 	@Transactional
 	public boolean upVote(long questionId) {
 		Question question = em.find(Question.class, questionId);
@@ -37,7 +53,7 @@ public class QuestionRepositoryCustomImpl implements QuestionRepositoryCustom {
 	public boolean addTag(long questionId, String tagName) {
 		Question question = em.find(Question.class, questionId);
 		if(question == null) { return false; }
-		Set<Tag> tags = question.getTags();
+		SortedSet<Tag> tags = question.getTags();
 
 		Tag tagToBeAdded = em.find(Tag.class, tagName);
 		if(tagToBeAdded == null) {
@@ -93,5 +109,54 @@ public class QuestionRepositoryCustomImpl implements QuestionRepositoryCustom {
 		question.setAcceptedAnswer(null);
 		return true;
 	}
+
+	@Transactional
+	public SortedSet<Question> findRelatedQuestions(long questionId, int max) {
+		Question question = em.find(Question.class, questionId);
+		SortedSet<Tag> tags = question.getTags();
+
+		int resLength = 0;
+		SortedSet<Question> res = new TreeSet<Question>(questionComparator); 
+
+		for(Tag t : tags) {
+			Set<Question> associatedQuestions = t.getAssociatedQuestions();
+			System.out.println(t.getName() + ": associated questions : " +associatedQuestions);
+			for(Question q : associatedQuestions) {
+				if(q.getId() != question.getId()) {
+					res.add(q);
+					if(++resLength >= max) {
+						return res;
+					}
+				}
+			}
+		}
+		System.out.println("findRelatedQuestions");
+		System.out.println(res);
+		return res;
+	}
+
+	@Transactional
+	public Set<Question> findRelatedQuestions(long questionId) {
+		Set<Tag> res = new TreeSet<Tag>();
+		Question question = em.find(Question.class, questionId);
+		Set<Tag> tags = question.getTags();
+		Set<String> tagNames = new TreeSet<String>();
+		for(Tag t : tags) {
+			tagNames.add(t.getName());
+		}
+		List<Question> resList = em.createQuery("Select q from Question q join q.tags t where t.name in :names", Question.class)
+			.setParameter("names",tagNames)
+			.getResultList();
+		return new HashSet<Question>(resList);
+	}
+
+	private class RecentQuestionComparator implements Comparator<Question> {
+
+		public int compare(Question q1, Question q2) {
+			return (int)(q1.getTimestamp() - q2.getTimestamp());
+		}
+	}
+
+
 
 }

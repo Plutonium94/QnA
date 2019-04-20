@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import java.security.Principal;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Optional;
 
@@ -78,6 +79,7 @@ public class QuestionController {
 			model.addAttribute("shortedTitle", shorten(question.getTitle(), 8));
 			model.addAttribute("allTags",tagRep.findAll());
 			model.addAttribute("newAnswer", new Answer());
+			model.addAttribute("relatedQuestions", questRep.findRelatedQuestions(question.getId()));
 			return "questions/view";
 		}
 	}
