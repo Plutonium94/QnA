@@ -1,14 +1,14 @@
-#QnA - Questions and Answers
+# QnA - Questions and Answers
 
-##Description
+## Description
 A question answer site (similair to StackOverflow or Quora), created using Spring technologies.
 
-##Running the project
+## Running the project
 `mvn spring-boot:run`
 
-##Technologies used
-*Spring Web MVC (with Thymeleaf)
-*Spring Boot
-*Spring Security
-*Spring Data JPA
+## Technologies used
+* Spring Web MVC (with Thymeleaf)
+* Spring Boot
+* Spring Security
+* Spring Data JPA
 
