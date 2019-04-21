@@ -1,7 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 	<header th:fragment="header">
-		<h2>Question and Answers</h2>
+		<h2><a th:href="@{/questions/}">Question and Answers</a></h2>
+		<p>Hi <span sec:authentication="name"></span> !</p>
 		<p><a id="ask" class="button" th:href="@{/questions/new}">Ask a question</a></p>
 	</header>
 </body>

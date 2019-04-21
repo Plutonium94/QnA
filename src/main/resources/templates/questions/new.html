@@ -7,18 +7,61 @@
 </head>
 <body>
 
-	<h1>Ask a new question</h1>
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+
+	<div th:replace="questions/header :: header"></div>
+
 
 	<form method="POST" action="/questions/new" name="req" th:object="${question}">
-		<input type="text" th:field="*{title}" placeholder="Title" />
+		<h1>Ask a new question</h1>
+		<input type="text" th:field="*{title}" placeholder="Question Title" /><br>
 		<textarea th:field="*{detail}" placeholder="The question details go here ...">
 		</textarea>
+		<br>
 
 		
 		
-
-		<button type="submit">Ask !</button>
+		<div class="centrer">
+			<button type="submit" class="w3-button w3-yellow">Ask !</button>
+		</div>
 	</form>
+
+	<style>
+
+		input, textarea {
+			margin-bottom: 30px;
+			border:2px solid gold;
+			border-radius: 14px;
+			width: 100%;
+			padding: 30px 50px;
+		}
+
+		form > h1 {
+			text-align: center;
+		}
+
+		.centrer {
+			display: flex;
+			justify-content: center;
+		}
+
+		form button.w3-button {
+			width:40%;
+			padding: 40px 40px;
+		}
+
+
+		form {
+			width: 50%;
+			margin: auto;
+		}
+
+		header {
+			padding: 20px 40px;
+		}
+
+		header h2 a { text-decoration: none; cursor: pointer;}
+	</style>
 
 	
 </body>

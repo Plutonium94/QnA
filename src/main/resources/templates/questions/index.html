@@ -7,14 +7,31 @@
 </head>
 <body>
 
+	
+
 	<div th:replace="questions/header :: header"></div>
 
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
 
 	<h1>Questions</h1>
 
-	<div th:each="q : ${questions}">
-		<h3><a th:href="@{/questions/{qid}(qid=${q.id})}" th:text="${q.title}"></h3>
+	<div th:each="q : ${questions}" class="questions">
+		<h3><a th:href="@{/questions/{qid}(qid=${q.id})}" th:text="${q.title}"></a></h3>
 	</div>
+
+	<style>
+
+		div.questions { width: 80%; margin: auto;}
+
+		h1 { text-align: center;}
+
+		header {
+			padding: 20px 40px;
+		}
+
+		header h2 a { text-decoration: none; cursor: pointer;}
+
+	</style>	
 
 
 </body>

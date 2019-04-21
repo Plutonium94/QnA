@@ -4,30 +4,33 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
 	<title th:text="${'QnA - ' + shortedTitle}"></title>
-	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
 </head>
-<body>
+<body class="w3-container">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
 
 	<div th:replace="questions/header :: header"></div>
 
+	<main class="w3-row">
+	<article class="w3-col l8">
+	<div class="question w3-card w3-amber">
 	<h1 th:text="${question.title}"></h1>
 
-	<p th:text="${question.detail}"></p>
+	<p th:text="${question.detail}" class="w3-card-4 w3-padding-large detail"></p>
 
 	<p th:text="${'asked by ' + question.author.username}"></p>
 	
 	<p>
-		<span id="q_upvotes" th:text="${question.upVotes}"></span>
+		<span id="q_upvotes" th:text="${question.upVotes}" class="w3-badge w3-green"></span>
 		&nbsp;upvotes and 
-		<span id="q_downvotes" th:text="${question.downVotes}"></span>
+		<span id="q_downvotes" th:text="${question.downVotes}" class="w3-badge w3-red"></span>
 		&nbsp;downvotes.
 	</p>
 
-	<button id="q_upvote" type="button">upvote !</button>
-	<button id="q_downvote" type="button">downvote !</button>
+	<button id="q_upvote" type="button" class="w3-button w3-black w3-hover-green">upvote !</button>
+	<button id="q_downvote" type="button" class="w3-button w3-black w3-hover-red">downvote !</button>
 
 	<p id="q_tags">
-		<span class="tag" th:text="${t.name}" th:each="t : ${question.tags}"></span>
+		<span class="tag w3-tag w3-blue" th:text="${t.name}" th:each="t : ${question.tags}"></span>
 	</p>
 
 	<input type="text" list="allTags" id="addTagInput" placeholder="Add Tag">
@@ -39,19 +42,24 @@
 
 	<p><a th:href="@{/questions/}">Back to question list.</a></p>
 
+	</div>
+
 	<div id="answers">
 
 		<form method="POST" th:action="@{/questions/{qid}/new-answer(qid=${question.id})}" th:object="${newAnswer}">
 			<textarea id="yourAnswer" th:field="*{content}" placeholder="Enter your answer here ...">
-			</textarea>
-			<button type="submit">Post your answer</button>
+			</textarea><br>
+			<button type="submit" class="w3-button w3-purple">Post your answer</button>
 		</form>
 
-		<div class="answer" th:each="a : ${question.answers}" th:attr="data-id=${a.id}, data-accepted=${a.equals(question.acceptedAnswer)}">
+		<div class="answer w3-card w3-padding-large" th:each="a : ${question.answers}" 
+			th:attr="data-id=${a.id}, data-accepted=${a.equals(question.acceptedAnswer)}">
+
 			<p th:text="${a.content}"></p>
+			<p th:text="${'by ' + a.author.username}"></p>
 			<p>
-				<span class="upvotes" th:attr="data-id=${a.id}" th:text="${a.upVotes}"></span> upvotes and 
-				<span class="downvotes" th:attr="data-id=${a.id}" th:text="${a.downVotes}"></span> downvotes.
+				<span class="upvotes w3-badge w3-green" th:attr="data-id=${a.id}" th:text="${a.upVotes}"></span> upvotes and 
+				<span class="downvotes w3-badge w3-red" th:attr="data-id=${a.id}" th:text="${a.downVotes}"></span> downvotes.
 			</p>
 
 			<p th:if="${viewerIsAuthor} and ${!a.equals(question.acceptedAnswer)}">
@@ -66,22 +74,30 @@
 				</button>
 			</p>
 
-			<button class="a_upvote" th:attr="data-id=${a.id}" type="click">Upvote !</button>
-			<button class="a_downvote" th:attr="data-id=${a.id}" type="click">Downvote !</button>
+			<button th:attr="data-id=${a.id}" type="button" class="a_upvote w3-button w3-black w3-hover-green">Upvote !</button>
+			<button th:attr="data-id=${a.id}" type="button" class="a_downvote w3-button w3-black w3-hover-red">Downvote !</button>
 
 		</div>		
 
-		<div id="relatedQuestions">
-
-			<p th:each="rq : ${relatedQuestions}">
-				<a th:href="@{/questions/{rqid}(rqid=${rq.id})}"
-					th:text="${rq.title}">
-				</a>
-			</p>
-
-		</div>
 
 	</div>
+	</article>
+
+	<aside id="relatedQuestions" class="w3-col l4">
+
+		<h3>Questions with similair topics</h3>
+
+		<p th:each="rq : ${relatedQuestions}">
+			<a th:href="@{/questions/{rqid}(rqid=${rq.id})}"
+				th:text="${rq.title}">
+			</a>
+		</p>
+
+		<p th:if="${relatedQuestions.isEmpty()}">There are no related questions.</p>
+
+	</div>
+
+	</main>
 
 	<script th:inline="javascript">
 
@@ -245,8 +261,23 @@
 	</script>
 
 	<style>
+		article p.detail { background-color: wheat; }
 		.tag {margin-right: 7px;}
+		.question.w3-card, .answer, #answers form { padding: 20px 40px; }
+		#answers form textarea, #answers form button { margin: 8px 0px;}
+		#answers form textarea { padding: 8px 16px; border: 2px solid #333333; width:100%;}
+		#answers form { margin: 36px 0px; border: 4px solid rgb(56,110, 89);}
+		.answer { margin-bottom: 40px; }
 		.answer[data-accepted=true]{ background-color: limegreen;}
+		.answer[data-accepted=false] {background-color: #ffeb3b;}
+		article {padding: 5px 15px;}
+		aside { padding-left: 19px;}
+
+		header {
+			padding: 20px 40px;
+		}
+
+		header h2 a { text-decoration: none; cursor: pointer;}
 	</style>
 </body>
 </html>
